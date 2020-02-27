@@ -100,7 +100,7 @@ export AZURE_TENANT=<security-principal-tenant>
 
 _Read more about [Providing Credentials to Azure Modules](https://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html#providing-credentials-to-azure-modules)._
 
-## Run an Ansible Playbook
+## Step 4 - Run an Ansible Playbook
 
 After you provided the necessary values for Ansible to connect to Azure through either a credentials file or environment variables you can test the connection by running an Ansible playbook.
 
@@ -138,9 +138,9 @@ To execute the playbook use the ansible command `ansible-playbook` followed by t
 ansible-playbook playbook.yaml
 ```
 
-![Alt Text](https://thepracticaldev.s3.amazonaws.com/i/ug3q82y4ori976h29lcp.png)
+![Ansible Playbook Output](images/playbookOutput.png)
 
-### Sources <a name="Sources"></a>
+### Sources
 
 [Using Ansible with Azure](https://docs.microsoft.com/en-us/azure/ansible/ansible-overview)
 
