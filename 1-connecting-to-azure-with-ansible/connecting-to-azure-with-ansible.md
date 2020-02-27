@@ -8,11 +8,11 @@
 
 ## Introduction
 
-Ansible is an open-source software provisioning, configuration management, and application deployment tool that includes a declarative language to describe system configurations. Ansible can configure both Linux and Windows operating systems. It can also deploy, provision, and configure Cloud resources, such as Azure resources. In order to use Ansible with Azure, you must first define the connection settings between the Ansible server and Azure as an infrastructure platform. In this article you'll learn how to connect an Ansible server to Azure using an Azure service principal account.
+Ansible is an open-source software provisioning, configuration management, and application deployment tool that includes a declarative language to describe system configurations. Ansible can configure both Linux and Windows operating systems. It can also deploy, provision, and configure Cloud resources, such as Azure resources. In order to use Ansible with Azure, you must first define the connection settings between the Ansible server and Azure as an infrastructure platform. In this article you'll learn how to connect an Ansible server to Azure using an Azure Service Principal account.
 
 ## Step 1 - Create an Azure Service Principal
 
-The first step is to create an Azure Service Principal account.
+The first step is to create an Azure Service Principal account. You will use this to authenticate to your Azure subscription. After the Service Principal is created you will need to grant it permissions to your subscription. In this tutorial you'll be assigning contributor permissions to the entire subscription. In order to create the service principal with Azure PowerShell you'll need to first create a credentials object which contains the password of the new service principal. Using a technique in PowerShell called splatting you'll pass the user name and password it contains to the cmdlet `New-AzAdServicePrincipal`. This cmdlet will create a new service principal in Azure.
 
 [Providing Credentials to Azure Modules](https://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html#providing-credentials-to-azure-modules)
 
@@ -28,7 +28,9 @@ $spSplat = @{
 $sp = New-AzAdServicePrincipal @spSplat
 ```
 
-## Assign a Role to the Service Principal
+## Step 2 - Assign a Role to the Service Principal
+
+Once the service principal is created next you'll assign permissions to that service principal in Azure. In this tutorial you'll be assigning the Contributor role to the service principal for the entire subscription. The cmdlet for assigning role permissions is `New-AzRoleAssignment`. You need to specify three parameters in order to assign the role to the service principal. The ObjectID, which is the Id property of the service principal you just created. When the service principal was created in Step 1 the output was stored in a variable called `$sp` and the Id property can be accessed by specifying that property on the $sp variable. RoleDefinitionName is set to Contributor and Scope value is set to `/subscription/$subId`. `$subId` is a variable containing the subscription id for the Azure subscription you are targeting. That variable is populated by the `Get-AzSubscription` cmdlet. Update `NameofSubscriptionHere` with the name of your Azure subscription.
 
 ```powershell
 $subId = (Get-AzSubscription -SubscriptionName 'NameOfSubscriptionHere').id
@@ -36,18 +38,18 @@ $subId = (Get-AzSubscription -SubscriptionName 'NameOfSubscriptionHere').id
 $roleAssignmentSplat = @{
     ObjectId = $sp.id
     RoleDefinitionName = 'Contributor'
-    Scope = "/subscriptions/$spId"
+    Scope = "/subscriptions/$subId"
 }
 
 New-AzRoleAssignment @roleAssignmentSplat
 
 ```
 
-## Create Azure credentials
+## Step 3 - Create Azure credentials
 
-### Gather Required Values
+### Gather Required Information
 
-In order to connect to Azure from Ansible you'll need the following values:
+For this tutorial you'll need the subscription Id, service principal appId, service principal name, and the tenant Id of the service principal to connect Ansible to Azure. All of the required information can be gather with Azure PowerShell cmdlets. After you have the required information you can connect Ansible to Azure in two different ways. You can either use a credentials file or environment variables.
 
 * Subscription Id
 * Service Principal AppId
@@ -65,6 +67,8 @@ $tenantId = (Get-AzSubscription -SubscriptionName 'NameOfSubscriptionHere').Tena
 ```
 
 ### Option 1: Use Ansible Credentials File
+
+Ansible looks in specific locations to auto load credentials if certain files exists. The Azure Ansible module uses the path `~/.azure/credentials`. Placing a file in this location with the proper values will result in Ansible being able to connect to Azure. Keep in mind that credential files in Ansible are used for development environments. To use this method create a file at `~/.azure/credentials` and populated the variables subscription_id, client_id, secret, and tenant.
 
 `1.` Create a credentials file
 
@@ -85,24 +89,32 @@ tenant=<security-principal-tenant>
 
 ### Option 2: Use Ansible Environment Variables
 
-`1.` Export environment variables on Ansible server. Replace `<Text>` with actual values.
+Instead of using a credentials file you can also populate specific environment variables that Ansible Azure module will use to connect to Azure. Using the bash command `export` you can define these values. Replace `<Text>` with actual values.
 
-```
+```bash
 export AZURE_SUBSCRIPTION_ID=<subscription_id>
 export AZURE_CLIENT_ID=<security-principal-appid>
 export AZURE_SECRET=<security-principal-password>
 export AZURE_TENANT=<security-principal-tenant>
 ```
 
+_Read more about [Providing Credentials to Azure Modules](https://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html#providing-credentials-to-azure-modules)._
+
 ## Run an Ansible Playbook
 
-`1.` Create a playbook file.
+After you provided the necessary values for Ansible to connect to Azure through either a credentials file or environment variables you can test the connection by running an Ansible playbook.
+
+### Create a playbook file
+
+Ansible playbooks are written in YAML. Create a playbook by creating a new file named playbook.yaml and opening it in vi.
 
 ```bash
   vi playbook.yaml
 ```
 
-`2.` Paste playbook contents in.
+### Paste playbook contents in
+
+Below is an Ansible playbook that creates an Azure resource group named `ansible-rg` in the `eastus` region. It also registers the output to an Ansible variable and outputs it with the debug module. Copy and paste in the contents below to populate the playbook.
 
 ```yaml
 ---
@@ -118,9 +130,11 @@ export AZURE_TENANT=<security-principal-tenant>
         var: rg
 ```
 
-`3.` Run the playbook using ansible-playbook
+### Run the playbook using ansible-playbook
 
-```
+To execute the playbook use the ansible command `ansible-playbook` followed by the name of the playbook which is `playbook.yaml`. Once the playbook finishes running you will have a newly created resource group called ansible-rg in Azure!
+
+```bash
 ansible-playbook playbook.yaml
 ```
 
