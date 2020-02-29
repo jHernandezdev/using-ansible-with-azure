@@ -1,14 +1,14 @@
 # Connect to Azure with Ansible
 
+## Introduction
+
+Ansible is an open-source software provisioning, configuration management, and application deployment tool that includes a declarative language to describe system configurations. Ansible can configure both Linux and Windows operating systems. It can also deploy, provision, and configure Cloud resources, such as Azure resources. In order to use Ansible with Azure, you must first define the connection settings between the Ansible server and Azure as an infrastructure platform. In this article you'll learn how to connect an Ansible server to Azure using an Azure Service Principal account.
+
 ## Prerequisites
 
 * [Azure subscription](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)
 * [Ansible installed for Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ansible-install-configure?toc=%2Fazure%2Fansible%2Ftoc.json&bc=%2Fazure%2Fbread%2Ftoc.json#install-ansible-on-an-azure-linux-virtual-machine)
 * [Azure PowerShell module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.1.0)
-
-## Introduction
-
-Ansible is an open-source software provisioning, configuration management, and application deployment tool that includes a declarative language to describe system configurations. Ansible can configure both Linux and Windows operating systems. It can also deploy, provision, and configure Cloud resources, such as Azure resources. In order to use Ansible with Azure, you must first define the connection settings between the Ansible server and Azure as an infrastructure platform. In this article you'll learn how to connect an Ansible server to Azure using an Azure Service Principal account.
 
 ## Step 1 - Create an Azure Service Principal
 
