@@ -8,8 +8,8 @@
 4. Deploy a Linux Virtual Machine to Azure with Ansible
 5. Connect to an Azure Windows Host with Ansible
 6. Connect to an Azure Linux Host with Ansible
-7. Configure a Windows Web Server with Ansible
-8. Configure a Linux Apache Web Server with Ansible
+7. Configure a Windows Web Server with Ansible in Azure
+8. Configure a Linux Apache Web Server with Ansible in Azure
 9. Decouple Ansible Secrets with Azure Key Vault
     * Lookup Azure Key Vault Secrets with Ansible
 10. Ansible Repository Design
@@ -22,5 +22,5 @@
 2. Connect to Azure with Ansible
 3. Deploy a Windows Virtual Machine to Azure with Ansible
 4. Connect to an Azure Windows Host with Ansible
-5. Configure a Windows Host with Ansible
+5. Configure a Windows Web Server with Ansible in Azure
 6. Decouple Ansible Secrets with Azure Key Vault
