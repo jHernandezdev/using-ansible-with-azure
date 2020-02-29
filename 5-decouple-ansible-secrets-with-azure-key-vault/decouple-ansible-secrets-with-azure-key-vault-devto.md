@@ -10,8 +10,8 @@ You accomplish this by first using a secret management system to store secrets a
 * [Prerequisites](#prerequisites)
 * [Step 1 - Create an Azure Key Vault](#create-an-azure-key-vault)
 * [Step 2 - Create Secrets in Azure Key Vault](#create-secrets-in-azure-key-vault)
-* [Step 3a - Use AzPowerShell & AzCLI to Lookup Secrets](#use-azpowershell-&-azcli-to-lookup-secrets)
-* [Step 3b - Use azure_keyvault_secret Ansible Lookup Plugin](#use-azure_keyvault_secret-ansible-lookup-plugin)
+* [Step 3 Option 1 - Use AzPowerShell & AzCLI to Lookup Secrets](#use-azpowershell-&-azcli-to-lookup-secrets)
+* [Step 3 Option 2 - Use azure_keyvault_secret Ansible Lookup Plugin](#use-azure_keyvault_secret-ansible-lookup-plugin)
     * [Add the Lookup Plugin](#add-the-lookup-plugin)
     * [Non-Managed Identity Lookups](#non-managed-identity-lookups)
     * [Managed Identity Lookups](#managed-identity-lookups)
@@ -25,7 +25,7 @@ You accomplish this by first using a secret management system to store secrets a
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 * [Connecting to Azure with Ansible](https://dev.to/cloudskills/connecting-to-azure-with-ansible-22g2)
 
-## Create an Azure Key Vault <a name="create-an-azure-key-vault"></a>
+## Step 1 - Create an Azure Key Vault <a name="create-an-azure-key-vault"></a>
 
 Before you can use secrets stored in Azure Key Vault you must first create the Azure Key Vault and the secrets you wish to retrieve. Creating these resources in Azure can be done with Ansible. `azure_rm_keyvault` is the Ansible module that is used to create the Azure Key Vault itself. The required parameters are; resource group, sku name, vault tenant, and vault name. While these are the required parameters. The Azure Key Vault will not be useful unless Ansible can access the secrets stored inside. To address that you must also define access policies.
 
@@ -78,7 +78,7 @@ Azure Key Vault can store more than just secrets. It can also store certificates
               - set
 ```
 
-## Create Secrets in Azure Key Vault <a name="create-secrets-in-azure-key-vault"></a>
+## Step 2 - Create Secrets in Azure Key Vault <a name="create-secrets-in-azure-key-vault"></a>
 
 Creating secrets in an Azure Key Vault can be done with the `azure_rm_keyvaultsecret` Ansible module. This Ansible module allows you to create, update, and delete secrets stored in Azure Key Vault. It does not however allow you to lookup those secrets. The azure_rm_keyvaultsecret module requires you specify a secret name, a secret value, and the key vault uri. The key vault uri can be within the portal under the properties blade called DNS Name. It can also be found with AzureCli or AzPowerShell. All of those are valid methods for obtaining the key vault uri, but you can also look it up with Ansible.
 
@@ -128,7 +128,7 @@ The Ansible module `azure_rm_keyvault_info` will query an existing Azure Key Vau
 _Learn more about [Working with Ansible Register Variables](
 https://www.mydailytutorials.com/ansible-register-variables/)._
 
-## Use AzPowerShell & AzCLI to Lookup Secrets <a name="use-azpowershell-&-azcli-to-lookup-secrets"></a>
+## Step 3 Option 1 - Use AzPowerShell & AzCLI to Lookup Secrets <a name="use-azpowershell-&-azcli-to-lookup-secrets"></a>
 
 At this point you have an Azure Key Vault instance and a secret stored in the vault. That secret can now be used in future playbooks to populate sensitive information. But how do you retrieve that information with Ansible? One way is to use the Azure PowerShell module. Ansible has the ability to run shell commands within a task. On Linux operating systems you'll use the `shell` Ansible module.
 
@@ -200,7 +200,7 @@ _Learn more bout [Querying Azure CLI command output](https://docs.microsoft.com/
         msg: "{{ result.stdout }}"
 ```
 
-## Use azure_keyvault_secret Ansible Lookup Plugin <a name="use-azure_keyvault_secret-ansible-lookup-plugin"></a>
+## Step 3 Option 2 - Use azure_keyvault_secret Ansible Lookup Plugin <a name="use-azure_keyvault_secret-ansible-lookup-plugin"></a>
 
 Lookup Plugins in Ansible are an advanced feature that allow you to  to access data from outside sources.The simplest lookup plugin is one that allows you to access data in a file. Similar to using a `cat` or `Get-Content` command. Microsoft has written an Ansible lookup plugin for Azure Key Vault called `azure_keyvault_secret`. The plugin is written in Python and can be found on GitHub inside the [azure_preview_modules](https://github.com/Azure/azure_preview_modules/blob/master/lookup_plugins/azure_keyvault_secret.py) repository. 
 
