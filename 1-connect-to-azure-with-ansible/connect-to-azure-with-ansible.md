@@ -1,4 +1,4 @@
-# Connecting to Azure with Ansible
+# Connect to Azure with Ansible
 
 ## Prerequisites
 

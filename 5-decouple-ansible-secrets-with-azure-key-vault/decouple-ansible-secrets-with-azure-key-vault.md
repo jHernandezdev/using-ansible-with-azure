@@ -1,4 +1,6 @@
-# Introduction
+# Decouple Ansible Secrets with Azure Key Vault
+
+## Introduction
 
 As companies become more security conscious, password rotation is often one of the first areas addressed. Secret management is one solution to the problem of password rotation. Decoupling and centralizing secretes into a secret management system is a good start. However, that's not the greatest value add you'll get from a secret management system. The true benefit is being able to rotate those secrets without manual intervention or fear of the unknown side effects of that change.This frees you from having to manually update password and improves security posture.
 

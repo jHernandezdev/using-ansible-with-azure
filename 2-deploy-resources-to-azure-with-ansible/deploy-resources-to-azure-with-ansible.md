@@ -1,4 +1,6 @@
-# Introduction
+# Deploy Resources to Azure with Ansible
+
+## Introduction
 
 Ansible is a configuration management tool used to control and apply configuration changes to infrastructure. However, before you can apply changes to the infrastructure it first has to exist. Ansible has several Azure modules that allow you to deploy resources in Azure. This tutorial will walk you through deploying a Windows virtual machine to Azure using an Ansible playbook. By the end of the tutorial you'll understand how to use several of the Azure Ansible modules to deploy workloads to Azure.
 

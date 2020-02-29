@@ -1,4 +1,6 @@
-# Introduction
+# Connect to an Azure Windows Host with Ansible
+
+## Introduction
 
 Ansible is an agentless configuration management tool. Instead of using an agent to communicate with target machine Ansible relies on remote management protocols such as SSH and WinRM. Not depending on an agent for connectivity has it's pros can cons. While you do not have to install an agent, you do have to setup the remote management protocol. In this tutorial you'll be provisioning a Windows Server virtual machine by using PowerShell and a custom script extension Deployed by Ansible to Azure. By the end of the tutorial, you will be able to connect to the Azure virtual machine with Ansible using WinRM.
 

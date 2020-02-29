@@ -1,4 +1,6 @@
-# Introduction
+# Configure a Windows Web Server with Ansible in Azure
+
+## Introduction
 
 The goal of this tutorial is to configure an Azure virtual machine as an IIS Web Server. You can think of configuration as any change you need to make inside the virtual machine. These are the types of changes Ansible is typically used for. Ansible uses a concept of tasks that execute sequentially. These tasks are created by using Ansible modules. Ansible modules, also called module libraries contain idempotent functionally that allow you to make changes to or gather information from different systems.
 
