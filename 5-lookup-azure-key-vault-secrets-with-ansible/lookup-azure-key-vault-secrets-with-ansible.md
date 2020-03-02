@@ -1,4 +1,4 @@
-# Decouple Ansible Secrets with Azure Key Vault
+# Lookup Azure Key Vault Secrets with Ansible
 
 ## Introduction
 
