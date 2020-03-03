@@ -42,7 +42,6 @@ $roleAssignmentSplat = @{
 }
 
 New-AzRoleAssignment @roleAssignmentSplat
-
 ```
 
 ## Step 3 - Create Azure credentials
