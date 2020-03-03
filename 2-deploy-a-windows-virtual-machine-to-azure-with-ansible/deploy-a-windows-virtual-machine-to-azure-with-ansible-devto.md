@@ -1,16 +1,26 @@
-# Deploy Resources to Azure with Ansible
-
-## Introduction
+# Introduction
 
 Ansible is a configuration management tool used to control and apply configuration changes to infrastructure. However, before you can apply changes to the infrastructure it first has to exist. Ansible has several Azure modules that allow you to deploy resources in Azure. This tutorial will walk you through deploying a Windows virtual machine to Azure using an Ansible playbook. By the end of the tutorial you'll understand how to use several of the Azure Ansible modules to deploy workloads to Azure.
 
-## Prerequisites
+## Table Of Contents
+
+* [Prerequisites](#prerequisites)
+* [Step 1 - Create a Resource Group](#step-1-create-a-resource-group)
+* [Step 2 - Create a Virtual Network](#step-2-create-a-virtual-network)
+* [Step 3 - Create a Public Ip](#step-3-create-a-public-ip)
+* [Step 4 - Create a Network Security Group](#step-4-create-a-network-security-group)
+* [Step 5 - Create a Virtual Network Interface Card](#step-5-create-a-virtual-network-interface-card)
+* [Step 6 - Create a Virtual Machine](#step-6-create-a-virtual-machine)
+* [Step 7 - Deploy an Azure Windows Virtual Machine](#step-7-deploy-an-azure-windows-virtual-machine)
+* [Conclusion](#conclusion)
+
+## Prerequisites <a name="prerequisites"</a>
 
 In order to follow along in this tutorial you'll need the following:
 
 * [Ansible installed](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ansible-install-configure?toc=%2Fazure%2Fansible%2Ftoc.json&bc=%2Fazure%2Fbread%2Ftoc.json#install-ansible-on-an-azure-linux-virtual-machine)
   * `ansible[azure]` pip packaged installed
-* [Connection to Azure from Ansible setup](https://dev.to/joshduffney/connecting-to-azure-with-ansible-22g2)
+* [Connect to Azure with Ansible]()
 
 ### Ansible Modules Required to Deploy an Azure Virtual Machine
 
@@ -24,7 +34,7 @@ Creating a virtual machine in Azure requires several different  Azure resources;
 * [azure_rm_networkinterface](https://docs.ansible.com/ansible/latest/modules/azure_rm_networkinterface_module.html#azure-rm-networkinterface-module)
 * [azure_rm_virtualmachine](https://docs.ansible.com/ansible/latest/modules/azure_rm_virtualmachine_module.html#azure-rm-virtualmachine-module)
 
-## Step 1 - Create a Resource Group
+## Step 1 - Create a Resource Group <a name="step-1-create-a-resource-group"</a>
 
 Azure resource groups are used to logically group related resources. Resource groups help organize your cloud environment and can also be used to grant access to specific workloads within the resource group. They are also required when creating other Azure resources. Such as virtual networks. Another benefit of resource groups is easy cleanup. When you delete a resource group everything inside of it is deleted with it. 
 
@@ -37,7 +47,7 @@ In order to create an Azure resource group with Ansible use the `azure_rm_resour
     location: eastus
 ```
 
-## Step 2 - Create a Virtual Network
+## Step 2 - Create a Virtual Network <a name="step-2-create-a-virtual-network"</a>
 
 Virtual networks allow you to build out your private network within Azure. Virtual networks are used to connect resources running within an Azure data center. Even though they are virtual and exist out of reach to you. The same networking principals apply. The virtual network requires two main parts; address space and a subnet or subnets. 
 
@@ -64,7 +74,7 @@ The task `Create virtual network` requires three parameters; `resource_group`, `
     virtual_network: vNet
 ```
 
-## Step 3 - Create a Public Ip
+## Step 3 - Create a Public Ip <a name="step-3-create-a-public-ip"</a>
 
 While the virtual network created previously will assign a private Ip address to the virtual machine the Public Ip address assigns a public Ip address to the virtual machine. Without a Public Ip address you won't be able to communicate with the virtual machine without a VPN or other means. To create an Azure Public Ip address resource using Ansible, you'll use the `azure_rm_publicipaddress` module.
 
@@ -85,7 +95,7 @@ Perhaps you want to return the public Ip address assigned right after the resour
     msg: "The public IP is {{ output_ip_address.state.ip_address }}"
 ```
 
-## Step 4 - Create a Network Security Group
+## Step 4 - Create a Network Security Group <a name="step-4-create-a-network-security-group"</a>
 
 Azure Network Security Groups are what filter network traffic based on a set of rules that are defined. You can think of them as being similar to a network firewall. Without a network security group allowing traffic in, you will not be able to connect to your virtual machine within Azure. For that reason it is necessary to use the `azure_rm_securitygroup` module to create one and also define some rules allowing traffic in.
 
@@ -120,7 +130,7 @@ It is a common practice to create one rule per protocol. In this example, you'll
             - 5986
 ```
 
-## Step 5 - Create a Virtual Network Interface Card
+## Step 5 - Create a Virtual Network Interface Card <a name="step-5-create-a-virtual-network-interface-card"</a>
 
 Every computer virtual or not requires some form of network interface card to communicate with computers outside of itself. That is where the Azure virtual network interface card comes in. Previous to this you've created several virtual networking components; a virtual network, subnet,  a public ip address, and a network security group. All of these resources will be assigned to a virtual network interface card giving the Azure virtual machine private and public network access.
 
@@ -140,7 +150,7 @@ The Ansible module to create an Azure virtual network interface is `azure_rm_net
         primary: True
 ```
 
-## Step 6 - Create a Virtual Machine
+## Step 6 - Create a Virtual Machine <a name="step-6-create-a-virtual-machine"</a>
 
 Everything to this point as prepared the Azure environment for you to deploy the virtual machine. You have a lot of options when it comes to deploying a virtual machine in Azure. However, in this tutorial you'll be deploying a Standard DS1 v2 Windows Server 2019 virtual machine. The Ansible module used to deploy Azure virtual machines is `azure_rm_virtualmachine`. 
 
@@ -165,7 +175,7 @@ As with every Azure resource you've created so far the virtual machine requires 
         version: latest
 ```
 
-## Step 7 - Deploy an Azure Windows Virtual Machine
+## Step 7 - Deploy an Azure Windows Virtual Machine <a name="step-7-deploy-an-azure-windows-virtual-machine"</a>
 
 Throughout this tutorial you've seen snippets of Ansible tasks. When putting those tasks into a playbook you have to add a few additional sections. `hosts` is used to define which target the playbook will be executed against. Setting this to localhost will run the playbook on the Ansible server itself.
 
@@ -174,6 +184,8 @@ Throughout this tutorial you've seen snippets of Ansible tasks. When putting tho
 `tasks` define the sequential tasks that are executed to complete the playbook. The order of these tasks is very important. For example, the task creating the resource group must be at the top. Without the resource group all the tasks after it will fail because the resource group does not exist yet.
 
 Because the tasks used in this playbook create Azure resources a connection from Ansible to Azure must be establish before you can execute the playbook. You have several options available to connect Ansible to Azure. You can define environment variables or create an Ansible credential file. Both options are explained in dept in [Connecting to Azure with Ansible](https://dev.to/joshduffney/connecting-to-azure-with-ansible-22g2).
+
+{% link https://dev.to/joshduffney/connecting-to-azure-with-ansible-22g2 %}
 
 ```yaml
 #deployWindowsAzureVirtualMachine.yaml
@@ -274,20 +286,18 @@ Because the tasks used in this playbook create Azure resources a connection from
 
 `ansible-playbook` is the Ansible command used to execute playbooks. Because the playbook is targeting localhost, the Ansible server itself no inventory or host file is required. All that is required is the name of the playbook to be executed. Save the above playbook as `deployWindowsAzureVirtualMachine.yaml` and run the following command to deploy your Windows virtual machine to Azure!
 
+![Alt Text](https://thepracticaldev.s3.amazonaws.com/i/w5pwly78ga7glaamkrop.gif)
+
 ```yaml
 ansible-playbook deployWindowsAzureVirtualMachine.yaml
 ```
 
-![DeployAzureVirtualMachinePlaybook](images/DeployAzureVirtualMachinePlaybook.gif)
-
-_Modified recording, actual run time is 5 minutes._
-
-## Conclusion
+### Conclusion <a name="conclusion"</a>
 
 You've now deployed a Windows virtual machine to Azure! At this point you might be wondering what the benefit of using Ansible is over creating the resources in the Azure portal or by using a PowerShell script. The benefits of using Ansible are;
 
-* codified infrastructure
-* idempotent automation
-* configuration management
+* Codified Infrastructure
+* Idempotent Automation
+* Configuration Management
 
 If you had used the portal you'd have a difficult time recreating the environment exactly the way it was before. If you had scripted the creation of all these resources you wouldn't be able to run that same script over and over without a lot of modification and error handling. That is where the idempotent nature of Ansible is extremely valuable.

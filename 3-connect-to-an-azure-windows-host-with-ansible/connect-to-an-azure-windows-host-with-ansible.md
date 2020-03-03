@@ -8,9 +8,9 @@ Ansible is an agentless configuration management tool. Instead of using an agent
 
 In order to follow along with this tutorial you'll need your Ansible environment connected Azure. All the required resources for an Azure virtual machine must also be deployed prior to following this tutorial. Both of these prerequisites are covered previously in this series.
 
-* [Connecting to Azure with Ansible](https://dev.to/joshduffney/connecting-to-azure-with-ansible-22g2)
+* [Connecting to Azure with Ansible]()
 
-* [Deploying Resources to Azure with Ansible](https://dev.to/joshduffney/deploying-resources-to-azure-with-ansible-1pon)
+* [Deploy a Windows Virtual Machine to Azure with Ansible]()
 
 ## Step 1 - Add WinRM Support to Ansible
 

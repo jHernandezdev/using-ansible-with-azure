@@ -12,7 +12,7 @@ You accomplish this by first using a secret management system to store secrets a
 * [Ansible installed for Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ansible-install-configure?toc=%2Fazure%2Fansible%2Ftoc.json&bc=%2Fazure%2Fbread%2Ftoc.json#install-ansible-on-an-azure-linux-virtual-machine)
 * [Azure PowerShell module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.1.0)
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-* [Connecting to Azure with Ansible](https://dev.to/cloudskills/connecting-to-azure-with-ansible-22g2)
+* [Connect to Azure with Ansible]()
 
 ## Step 1 - Create an Azure Key Vault
 

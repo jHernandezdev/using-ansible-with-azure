@@ -8,11 +8,11 @@ The goal of this tutorial is to configure an Azure virtual machine as an IIS Web
 
 In order for you to follow along with this tutorial you'll need the Ansible server connected to Azure. You'll also need several resources deployed to Azure to support a Windows virtual machine hosted in Azure. And before you can connect to the Windows virtual it also needs to be provisioned and WinRM setup. All the steps to accomplish these tasks are laid out in the previous parts of the series.
 
-[Connecting to Azure with Ansible](https://dev.to/joshduffney/connecting-to-azure-with-ansible-22g2)
+[Connect to Azure with Ansible]()
 
-[Deploying Resources to Azure with Ansible](https://dev.to/joshduffney/deploying-resources-to-azure-with-ansible-1pon)
+[Deploy a Windows Virtual Machine to Azure with Ansible]()
 
-[Provisoning Azure Resources with Ansible](https://dev.to/cloudskills/provisioning-azure-resources-with-ansible-be2)
+[Connect to an Azure Windows Host with Ansible]()
 
 Ansible's documentation has an index dedicated to Windows modules. Which are prefixed with `win_` at the beginning of the module name. In this tutorial you'll be using several Ansible modules to install and configure an IIS web server. In order to configure the IIS web server you'll use the following Ansible modules. You do not have to install them individually, they come installed with Ansible.
 
