@@ -94,8 +94,8 @@ pip install "pywinrm>=0.3.0"
 2. Use set_fact to create a variable
 
     ```yaml
-        - name: set public ip address fact
-          set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address')}}"
+    - name: set public ip address fact
+        set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address')}}"
     ```
 
 ## Step 6 - Wait for WinRM Connection
